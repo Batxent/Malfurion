@@ -1,0 +1,6 @@
+framework module Malfurion {
+  umbrella header "Malfurion-umbrella.h"
+
+  export *
+  module * { export * }
+}

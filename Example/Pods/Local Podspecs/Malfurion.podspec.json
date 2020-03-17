@@ -1,0 +1,30 @@
+{
+  "name": "Malfurion",
+  "version": "0.1.0",
+  "summary": "an ios networking layer in Swift.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/shaw/Malfurion",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "shaw": "dersolum@gmail.com"
+  },
+  "source": {
+    "git": "https://github.com/shaw/Malfurion.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "10.0"
+  },
+  "source_files": "Malfurion/Classes/**/*",
+  "dependencies": {
+    "Alamofire": [
+
+    ],
+    "PINCache": [
+
+    ]
+  }
+}

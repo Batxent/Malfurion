@@ -1,0 +1,27 @@
+PODS:
+  - Alamofire (4.9.1)
+  - Malfurion (0.1.0):
+    - Alamofire
+    - PINCache
+  - PINCache (2.3)
+
+DEPENDENCIES:
+  - Malfurion (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - PINCache
+
+EXTERNAL SOURCES:
+  Malfurion:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Malfurion: 3900da1b4f9c3914ed56dc064bb1aa87c527a01a
+  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
+
+PODFILE CHECKSUM: 7e9dabba7005254b1a124cf99077c4d5311b62b4
+
+COCOAPODS: 1.9.1
