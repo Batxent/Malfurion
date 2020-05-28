@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/Malfurion.svg?style=flat)](https://cocoapods.org/pods/Malfurion)
 [![Platform](https://img.shields.io/cocoapods/p/Malfurion.svg?style=flat)](https://cocoapods.org/pods/Malfurion)
 
-This project is base on CTNetworking(https://github.com/casatwy/CTNetworking) which is written in Objective-C. I simplified it in Swift5 accourding to my usage.
+This project is base on CTNetworking(https://github.com/casatwy/CTNetworking) which is written in Objective-C. I simplified it in Swift5 accourding to my usage experience.
 
 ## Example
 
