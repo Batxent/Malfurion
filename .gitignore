@@ -1,0 +1,7 @@
+Malfurion.xcodeproj/xcuserdata/
+Malfurion.xcworkspace/
+Pods/
+*.swp
+Podfile.lock
+.DS_Store
+Malfurion.xcodeproj/project.xcworkspace/xcuserdata/

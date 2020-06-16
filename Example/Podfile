@@ -1,0 +1,12 @@
+use_frameworks!
+inhibit_all_warnings!
+
+target 'Malfurion_Example' do
+  pod 'Malfurion', :path => '../'
+
+  target 'Malfurion_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
