@@ -17,23 +17,23 @@ struct ApiProxy {
                         service: Service,
                         path: String,
                         parameters: Parameters?,
+                        contentType: String?,
                         success: @escaping ResponseHandler,
                         failed: @escaping ResponseHandler) -> String {
         
         let url = service.completeUrl(path: path)
-        
-        var finalParameters = parameters
-        if let extral = service.parameters() {
-            finalParameters?.merge(extral, uniquingKeysWith: { return $1 })
-        }
+        var header = service.httpHeader()
         
         print("\n==================================\n\nRequest Start: \n\n \(url)\n\n==================================")
         
+        print("param: \(String(describing: parameters))")
+        print("param: \(String(describing: header))")
+        
         return AF.request(url, method: method,
-                          parameters: finalParameters,
-                          headers: service.httpHeader())
+                          parameters: parameters,
+                          headers: header)
             .response { (response) in
-                let _response = Response(dataResponse: response, requestParameters: finalParameters)
+                let _response = Response(dataResponse: response, requestParameters: parameters)
                 print("\n==================================\n\nRequest End: \n\n \(url)\n\n==================================")
                 debugPrint(response)
                 if (response.error == nil) {
@@ -42,5 +42,6 @@ struct ApiProxy {
                     failed(_response)
                 }
         }.id.uuidString
+        
     }
 }

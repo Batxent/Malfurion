@@ -17,7 +17,7 @@ public protocol ApiDelegate {
     func apiShouldContinueToFetch(_ api: ApiTemplate, with parameters: Parameters?) -> Bool
 }
 
-extension ApiDelegate {
+public extension ApiDelegate {
     func apiShouldContinueToFetch(_ api: ApiTemplate, with parameters: Parameters?) -> Bool {
         return true
     }

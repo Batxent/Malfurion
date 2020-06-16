@@ -16,6 +16,8 @@ public protocol Service {
     
     /// the web api version, eg. v2.0
     var version: String? { get }
+        
+    var contentType: String? { get }
     
     /// common parameters
     func parameters() -> Alamofire.Parameters?
@@ -32,7 +34,19 @@ public protocol Service {
     
 }
 
-extension Service {
+public extension Service {
+
+    var version: String? {
+        get {
+            return nil;
+        }
+    }
+    
+    var contentType: String? {
+        get {
+            return nil
+        }
+    }
     
     func completeUrl(path: String) -> String {
         var urlString = basePath

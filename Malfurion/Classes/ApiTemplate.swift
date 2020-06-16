@@ -20,7 +20,12 @@ open class ApiTemplate: Api {
     
     public var method: HTTPMethod = .get
     
+    public var contentType: String?
+    
     public var cacheAge: TimeInterval = 0.0
+    private var ignoreCache: Bool = false
+    
+    public var extraParam: Alamofire.Parameters?
     
     public var validator: Validator?
     
@@ -61,10 +66,26 @@ open class ApiTemplate: Api {
     }
     
     @discardableResult
+    public func fetchWithoutCache() -> String? {
+        self.ignoreCache = true
+        return fetch()
+    }
+    
+    @discardableResult
     public func fetch(with parameters: Parameters?) -> String? {
-        let reformedParameters = reforming(parameters: parameters)
         
-        if !(self.delegate?.apiShouldContinueToFetch(self, with: parameters) ?? true) {
+        var finalParameters = parameters
+        if let extraParamFromApi = self.extraParam {
+            finalParameters?.merge(extraParamFromApi, uniquingKeysWith: { return $1 })
+        }
+        
+        if let extral = service.parameters() {
+            finalParameters?.merge(extral, uniquingKeysWith: { return $1 })
+        }
+        
+        let reformedParameters = reforming(parameters: finalParameters)
+        
+        if !(self.delegate?.apiShouldContinueToFetch(self, with: reformedParameters) ?? true) {
             return nil
         }
         
@@ -74,24 +95,36 @@ open class ApiTemplate: Api {
             return nil
         }
         
-        // 检查缓存
-        let key = cacheKey(with: parameters)
-        if pinCache?.containsObject(forKey: key) ?? false {
-            self.status = .fetching
-            pinCache?.object(forKey: key, block: { (cache, key, value) in
-                let response = Response(data: value as? Data)
-                self.fetchSuccess(response: response)
-            })
-            return nil
-        }else {
-            if reachable() {
+        if self.ignoreCache == false {
+            // 检查缓存
+            let key = cacheKey(with: reformedParameters)
+            if pinCache?.containsObject(forKey: key) ?? false {
                 self.status = .fetching
-                return ApiProxy.request(method: self.method, service: self.service, path: self.path, parameters: parameters, success: self.fetchSuccess, failed: self.fetchFailed)
-            }else {
-                self.status = .networkUnreachable
-                return nil
+                if let value = pinCache?.object(forKey: key) as? Data {
+                    let response = Response(data: value)
+                    print("\n==================================\n\nRequest End: \n\n \(self.path)\n\n==================================")
+                    debugPrint(response)
+                    DispatchQueue.main.async {
+                        self.fetchSuccess(response: response)
+                    }
+                    return nil
+                }
             }
         }
+        
+        /// ignoreCache only works at once
+        if self.ignoreCache == true {
+            self.ignoreCache = false
+        }
+        
+        if reachable() {
+            self.status = .fetching
+            return ApiProxy.request(method: self.method, service: self.service, path: self.path, parameters: reformedParameters, contentType: self.contentType, success: self.fetchSuccess, failed: self.fetchFailed)
+        }else {
+            self.status = .networkUnreachable
+            return nil
+        }
+        
     }
     
     func fetchSuccess(response: Response) {
@@ -115,7 +148,7 @@ open class ApiTemplate: Api {
     }
     
     func fetchFailed(response: Response?) {
-        self.status = .timeout
+        //        self.status = .timeout
         self.delegate?.apiDidFailed(self, with: response)
         service.handle(response)
     }
